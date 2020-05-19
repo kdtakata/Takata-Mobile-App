@@ -26,7 +26,17 @@ const RootStack = createStackNavigator(
   {
     home: { screen: HomePage },
     pickle: {screen: AirbagCollection},
-    removal: {screen: RecyclerRemoval},
+    removal: {screen: RecyclerRemoval, navigationOptions : {
+      title: "Recycler Removal",
+     
+  
+      headerStyle: {
+        backgroundColor: "#e3e3e3"
+  
+      },
+  
+      headerTintColor: "#606070"
+    }},
     business: {screen: Business},
     test: {screen: Test},
     recycler: {screen: Recycler},

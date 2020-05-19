@@ -10,16 +10,27 @@ import {
   Dimensions,
   TouchableHighlight,
   TouchableOpacity,
-  Picker,
+  Picker
 } from "react-native";
 import Dialog from "react-native-dialog";
 import { SearchBar, Card } from "react-native-elements";
+import axios from 'axios';
 
 const width = Dimensions.get("window").width;
 var newItem;
 
 class RecyclerRemoval extends React.Component {
-  
+  static navigationOptions = {
+    title: "Recycler Removal",
+   
+
+    headerStyle: {
+      backgroundColor: "#e3e3e3"
+
+    },
+
+    headerTintColor: "#606070"
+  };
   constructor(props) {
     super(props);
     //setting default state
@@ -31,31 +42,31 @@ class RecyclerRemoval extends React.Component {
       trading: "",
       Phone: "",
       Address: "",
-      selectedValue: "",
+      selectedValue: ""
     };
     this.arrayholder = [];
   }
   componentDidMount() {
-    fetch("https://www.takatavinview.com/business/getdetailed/")
-      .then((response) => response.json())
-      .then((responseJson) => {
-           console.log("Data Source", responseJson)
+    axios.get('https://www.takatavinview.com/business/getdetailed/')
+      .then(response => {
+       var dataset = response.data
+        console.log("Data Source", dataset[1]);
         this.setState(
           {
             isLoading: false,
-            dataSource: responseJson,
+            dataSource: dataset
           },
-          function () {
-            this.arrayholder = responseJson;
+          function() {
+            this.arrayholder = dataset;
           }
         );
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
   }
 
-  search = (text) => {
+  search = text => {
     console.log(text);
   };
   clear = () => {
@@ -64,9 +75,9 @@ class RecyclerRemoval extends React.Component {
 
   SearchFilterFunction(text) {
     //passing the inserted text in textinput
-    const newData = this.arrayholder.filter(function (item) {
+    const newData = this.arrayholder.filter(function(item) {
       //applying filter for the inserted text in search bar
-      const itemData = item.title ? item.title.toUpperCase() : "".toUpperCase();
+      const itemData = item.business_name ? item.business_name.toUpperCase() : "".toUpperCase();
       const textData = text.toUpperCase();
       return itemData.indexOf(textData) > -1;
     });
@@ -75,7 +86,7 @@ class RecyclerRemoval extends React.Component {
       //setting the filtered newData on datasource
       //After setting the data it will automatically re-render the view
       dataSource: newData,
-      search: text,
+      search: text
     });
   }
   handleCancel = () => {
@@ -96,7 +107,7 @@ class RecyclerRemoval extends React.Component {
         style={{
           height: 0.3,
           width: "90%",
-          backgroundColor: "#e3dbcd",
+          backgroundColor: "#e3dbcd"
         }}
       />
     );
@@ -107,7 +118,7 @@ class RecyclerRemoval extends React.Component {
         <Text style={styles.titleStyle}>Unable to find the Businesss? </Text>
         <Text
           style={{ color: "blue" }}
-        //  onPress={() => this.props.navigation.navigate("newBusi")}
+          //  onPress={() => this.props.navigation.navigate("newBusi")}
         >
           Create a new one
         </Text>
@@ -128,21 +139,22 @@ class RecyclerRemoval extends React.Component {
     return (
       //ListView to show with textinput used as search bar
       <View style={styles.viewStyle}>
-        
-          
-          <Picker style={{width: width}}
+        {/* <Picker
+          style={{ width: width }}
           selectedValue={this.state.selectedValue}
-       
-          onValueChange={(itemValue, itemIndex) => this.setState({selectedValue:itemValue})}>
+          onValueChange={(itemValue, itemIndex) =>
+            this.setState({ selectedValue: itemValue })
+          }
+        >
           <Picker.Item label="Business Name" value="java" />
-        <Picker.Item label="Trading Name" value="js" />
-          </Picker>
-      
+          <Picker.Item label="Trading Name" value="js" />
+        </Picker> */}
+
         <SearchBar
           round
           searchIcon={{ size: 24 }}
-          onChangeText={(text) => this.SearchFilterFunction(text)}
-          onClear={(text) => this.SearchFilterFunction("")}
+          onChangeText={text => this.SearchFilterFunction(text)}
+          onClear={text => this.SearchFilterFunction("")}
           placeholder="Type Here..."
           value={this.state.search}
         />
@@ -158,14 +170,14 @@ class RecyclerRemoval extends React.Component {
               onPress={() =>
                 this.setState({
                   modalVisible: true,
-                  business: item.username,
-                  trading: item.name,
-                  Phone: item.phone,
-                  Address: item.email,
+                  business: item.business_name,
+                  trading: item.Trading_name,
+                  Phone: item.business_phone,
+                  Address: item.street + ',' +item.state + ',' + item.postcode
                 })
               }
             >
-              {item.username}
+              {item.business_name}
             </Text>
           )}
           enableEmptySections={true}
@@ -199,16 +211,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flex: 1,
     backgroundColor: "white",
-    marginTop: Platform.OS == "ios" ? 30 : 0,
+    marginTop: Platform.OS == "ios" ? 30 : 0
   },
   textStyle: {
-    padding: 10,
+    padding: 10
   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    marginTop: 22
   },
   buttonstyle: {
     marginTop: 10,
@@ -216,14 +228,14 @@ const styles = StyleSheet.create({
     padding: 10,
     alignSelf: "center",
     borderRadius: 10,
-    width: 250,
+    width: 250
   },
   pickerBoxContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     borderRadius: 8,
-    marginTop: 10,
+    marginTop: 10
   },
   pickerBoxInner: {
     borderWidth: 0.6,
@@ -233,13 +245,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     flex: 1,
-    height: 37,
+    height: 37
   },
   pickerBoxIcon: {
     position: "absolute",
     right: 0,
     fontSize: 23,
-    color: "#0000",
+    color: "#0000"
   },
   pickerStyle: {
     width: "120%",
@@ -248,8 +260,8 @@ const styles = StyleSheet.create({
     transform: [{ scaleX: 0.85 }, { scaleY: 0.85 }],
     left: -25,
     position: "absolute",
-    backgroundColor: "transparent",
-  },
+    backgroundColor: "transparent"
+  }
 });
 
 export default RecyclerRemoval;
