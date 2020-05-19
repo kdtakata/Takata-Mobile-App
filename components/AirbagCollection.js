@@ -8,8 +8,9 @@ import {
   TouchableOpacity,
   Button
 } from "react-native";
-import RecyclerRemoval from './Recyclerremoval';
+import RecyclerRemoval from "./Recyclerremoval";
 import Dialog from "react-native-dialog";
+
 
 class AirbagCollection extends Component {
   static navigationOptions = {
@@ -29,7 +30,7 @@ class AirbagCollection extends Component {
   };
   state = {
     modalVisible: false
-  }
+  };
   handleCancel = () => {
     this.setState({ modalVisible: false });
   };
@@ -45,17 +46,27 @@ class AirbagCollection extends Component {
     const username = this.props.navigation.state.params.username;
     return (
       <View style={styles.container}>
-        <TouchableOpacity style={styles.buttonstyle} onPress={()=>{this.setState({modalVisible: !this.state.modalVisible})}}>
+        <TouchableOpacity
+          style={styles.buttonstyle}
+          onPress={() => {
+            this.setState({ modalVisible: !this.state.modalVisible });
+          }}
+        >
           <Text style={{ textAlign: "center" }}>Recycler Collection</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonstyle}>
-          <Text style={{ textAlign: "center" }} onPress={()=> this.props.navigation.navigate("removal")}>Recycler Removal</Text>
+          <Text
+            style={{ textAlign: "center" }}
+            onPress={() => this.props.navigation.navigate("removal")}
+          >
+            Recycler Removal
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttonstyle}>
           <Text style={{ textAlign: "center" }}>Pickles Yard Collection</Text>
         </TouchableOpacity>
         <View>
-        <Dialog.Container visible={this.state.modalVisible}>
+          <Dialog.Container visible={this.state.modalVisible}>
             <Dialog.Title>Confirm Business Detail</Dialog.Title>
             <Dialog.Description>
               Business Name:{this.state.business} {"\n"}
@@ -69,7 +80,7 @@ class AirbagCollection extends Component {
             <Dialog.Button label="Cancel" onPress={this.handleCancel} />
             <Dialog.Button label="Confirm" onPress={this.handleDelete} />
           </Dialog.Container>
-          </View>
+        </View>
       </View>
     );
   }

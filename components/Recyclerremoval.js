@@ -36,10 +36,10 @@ class RecyclerRemoval extends React.Component {
     this.arrayholder = [];
   }
   componentDidMount() {
-    fetch("https://jsonplaceholder.typicode.com/users")
+    fetch("https://www.takatavinview.com/business/getdetailed/")
       .then((response) => response.json())
       .then((responseJson) => {
-        //   console.log("Data Source", responseJson)
+           console.log("Data Source", responseJson)
         this.setState(
           {
             isLoading: false,

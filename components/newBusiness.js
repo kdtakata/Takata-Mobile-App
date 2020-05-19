@@ -8,69 +8,74 @@ import {
   StatusBar,
   TextInput,
   TouchableOpacity,
+  ScrollView
 } from "react-native";
-
 
 const width = Dimensions.get("window").width;
 export default class NewBusiness extends Component {
   state = {
-    value: "",
+    value: ""
   };
 
-  handleTextChange = (newText) => this.setState({ value: newText });
+  handleTextChange = newText => this.setState({ value: newText });
 
   render() {
     return (
       <>
         <View style={{ flex: 1, padding: 30, backgroundColor: "#f5fcff" }}>
-          <Text>Business Name</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>Trading Name</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>ABN</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text style={{ marginTop: 10, fontWeight: "bold" }}>Address</Text>
-          <Text>Street</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>City</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>State</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>PostCode</Text>
-          <Text style={{ fontWeight: "bold" }}>Contact Details</Text>
+          <ScrollView>
+            <Text>Business Name</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>Trading Name</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>Business Email</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>ABN</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>Business Phone</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>Fax</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>Website</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            
+            <Text style={{ marginTop: 10, fontWeight: "bold" }}>Address</Text>
+            <Text>Street</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>City</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>State</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>PostCode</Text>
+            
 
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>Business Email</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>Business Phone</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>Fax</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>Website</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>First Name</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>Last Name</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>Email</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>Mobile</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>Account Details</Text>
-          <Text>Account Name</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>BSB</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <Text>Account Number</Text>
-          <TextInput style={styles.textinput}></TextInput>
-          <TouchableOpacity style={styles.buttonstyle}>
-            <Text
-              style={{ textAlign: "center" }}
-              onPress={() => this.props.navigation.navigate("removal")}
-            >
-              Recycler Removal
-            </Text>
-          </TouchableOpacity>
+            <TextInput style={styles.textinput}></TextInput>
+           
+            <Text style={{marginTop: 10, fontWeight: "bold" }}>Contact Details</Text>
+            <Text>First Name</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>Last Name</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>Email</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>Mobile</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>Account Details</Text>
+            <Text>Account Name</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>BSB</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <Text>Account Number</Text>
+            <TextInput style={styles.textinput}></TextInput>
+            <TouchableOpacity style={styles.buttonstyle}>
+              <Text
+                style={{ textAlign: "center" }}
+                onPress={() => this.props.navigation.navigate("removal")}
+              >
+                Recycler Removal
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
       </>
     );
@@ -88,7 +93,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 5,
     padding: 10,
-    overflow: "hidden",
+    overflow: "hidden"
   },
   buttonstyle: {
     marginTop: 10,
@@ -96,6 +101,6 @@ const styles = StyleSheet.create({
     padding: 10,
     alignSelf: "center",
     borderRadius: 10,
-    width: 180,
-  },
+    width: 180
+  }
 });

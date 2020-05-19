@@ -14,7 +14,7 @@ import NewBusiness from './components/newBusiness';
 export default class App extends Component {
   componentDidMount() {
     console.disableYellowBox = true;
-    axios.defaults.baseURL = 'http://192.168.0.20:5000';
+   
   };
  
   render() {
