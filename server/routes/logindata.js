@@ -1,7 +1,7 @@
 const { Connection, Request } = require("tedious");
-module.exports = (req, res) => {
- 
-console.log("BJDsajdasjdhsdjk");
+
+module.exports = (req,res) => {
+    console.log(req)
 // Create connection to database
 const config = {
   authentication: {
@@ -25,48 +25,35 @@ connection.on("connect", err => {
   if (err) {
     console.error(err.message);
   } else {
-    queryDatabase();
+    //queryDatabase();
   }
 });
 
-function queryDatabase() {
+async function queryDatabase() {
 
-  var map = new Map();
+
   console.log("Reading rows from the Table...");
 
   // Read all rows from table
-  const request = new Request(
+  const request =await new Request(
     `SELECT *
-     FROM [dbo].[nadi_nadiregistration]`,
+     FROM [dbo].[nadi_nadiregistration] where password = '` + req.body.password + `' and username ='` + req.body.username `'` ,
     (err, rowCount) => {
       if (err) {
         console.error(err.message);
       } else {
-        console.log(`${rowCount} row(s) returned`);
+          if(rowCount == 1){
+            res.status(200).send("Authorized");
+          }else{
+              res.status(404);
+          }
+          
       }
     }
   );
-
-  request.on("row", columns => {
-    columns.forEach(column => {
- map.set(column.metadata.colName, column.value)
- const obj = mapToObj(map)
- const object = JSON.stringify(obj)
-      console.log("%s\t%s", object);
-    });
-  });
-
+ 
+  
   connection.execSql(request);
 }
 
-function mapToObj(inputMap) {
-    let obj = {};
-
-    inputMap.forEach(function(value, key){
-        obj[key] = value
-    });
-
-    return obj;
 }
-
-};

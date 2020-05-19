@@ -10,6 +10,9 @@ import Test from './components/test';
 import Business from './components/business';
 import Recycler from './components/RecyclerCollection';
 import NewBusiness from './components/newBusiness';
+import PickleArea from './components/pickleList';
+import VinEnter from './components/enterVin';
+import Details from './components/submission'
 
 export default class App extends Component {
   componentDidMount() {
@@ -25,7 +28,7 @@ export default class App extends Component {
 const RootStack = createStackNavigator(
   {
     home: { screen: HomePage },
-    pickle: {screen: AirbagCollection},
+    airbag: {screen: AirbagCollection},
     removal: {screen: RecyclerRemoval, navigationOptions : {
       title: "Recycler Removal",
      
@@ -40,7 +43,10 @@ const RootStack = createStackNavigator(
     business: {screen: Business},
     test: {screen: Test},
     recycler: {screen: Recycler},
-    newBusi: {screen: NewBusiness}
+    newBusi: {screen: NewBusiness},
+    pickle: {screen: PickleArea},
+    vin:{screen: VinEnter},
+    detail:{screen: Details}
     
   },
   {

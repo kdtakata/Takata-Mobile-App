@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import Dialog from "react-native-dialog";
 import { SearchBar, Card } from "react-native-elements";
-import axios from 'axios';
+import axios from "axios";
 
 const width = Dimensions.get("window").width;
 var newItem;
@@ -22,11 +22,9 @@ var newItem;
 class RecyclerRemoval extends React.Component {
   static navigationOptions = {
     title: "Recycler Removal",
-   
 
     headerStyle: {
       backgroundColor: "#e3e3e3"
-
     },
 
     headerTintColor: "#606070"
@@ -47,9 +45,10 @@ class RecyclerRemoval extends React.Component {
     this.arrayholder = [];
   }
   componentDidMount() {
-    axios.get('https://www.takatavinview.com/business/getdetailed/')
+    axios
+      .get("https://www.takatavinview.com/business/getdetailed/")
       .then(response => {
-       var dataset = response.data
+        var dataset = response.data;
         console.log("Data Source", dataset[1]);
         this.setState(
           {
@@ -77,7 +76,9 @@ class RecyclerRemoval extends React.Component {
     //passing the inserted text in textinput
     const newData = this.arrayholder.filter(function(item) {
       //applying filter for the inserted text in search bar
-      const itemData = item.business_name ? item.business_name.toUpperCase() : "".toUpperCase();
+      const itemData = item.business_name
+        ? item.business_name.toUpperCase()
+        : "".toUpperCase();
       const textData = text.toUpperCase();
       return itemData.indexOf(textData) > -1;
     });
@@ -97,7 +98,7 @@ class RecyclerRemoval extends React.Component {
     // The user has pressed the "Delete" button, so here you can do your own logic.
     // ...Your logic
     this.setState({ modalVisible: false });
-    this.props.navigation.navigate("test");
+    this.props.navigation.navigate("vin");
   };
 
   ListViewItemSeparator = () => {
@@ -173,7 +174,7 @@ class RecyclerRemoval extends React.Component {
                   business: item.business_name,
                   trading: item.Trading_name,
                   Phone: item.business_phone,
-                  Address: item.street + ',' +item.state + ',' + item.postcode
+                  Address: item.street + "," + item.state + "," + item.postcode
                 })
               }
             >

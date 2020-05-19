@@ -29,7 +29,7 @@ class HomePage extends React.Component {
     
     //console.log("Response is ", response);
 
-    this.props.navigation.navigate("pickle", { username: this.state.username });
+    this.props.navigation.navigate("airbag", { username: this.state.username });
   };
   state = {
     username: " ",

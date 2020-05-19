@@ -11,7 +11,6 @@ import {
 import RecyclerRemoval from "./Recyclerremoval";
 import Dialog from "react-native-dialog";
 
-
 class AirbagCollection extends Component {
   static navigationOptions = {
     //To set the header image and title for the current Screen
@@ -29,7 +28,8 @@ class AirbagCollection extends Component {
     //Text Color of Navigation Bar
   };
   state = {
-    modalVisible: false
+    modalVisible: false,
+    collection: false
   };
   handleCancel = () => {
     this.setState({ modalVisible: false });
@@ -39,7 +39,11 @@ class AirbagCollection extends Component {
     // The user has pressed the "Delete" button, so here you can do your own logic.
     // ...Your logic
     this.setState({ modalVisible: false });
-    this.props.navigation.navigate("recycler");
+    if (this.state.collection) {
+      this.props.navigation.navigate("vin");
+    } else {
+      this.props.navigation.navigate("removal");
+    }
   };
 
   render() {
@@ -49,7 +53,12 @@ class AirbagCollection extends Component {
         <TouchableOpacity
           style={styles.buttonstyle}
           onPress={() => {
-            this.setState({ modalVisible: !this.state.modalVisible });
+            this.setState({
+              modalVisible: !this.state.modalVisible,
+              collection: !this.state.collection
+            });
+
+            //console.log("Response is ", response);
           }}
         >
           <Text style={{ textAlign: "center" }}>Recycler Collection</Text>
@@ -62,7 +71,10 @@ class AirbagCollection extends Component {
             Recycler Removal
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonstyle}>
+        <TouchableOpacity
+          style={styles.buttonstyle}
+          onPress={() => this.props.navigation.navigate("pickle")}
+        >
           <Text style={{ textAlign: "center" }}>Pickles Yard Collection</Text>
         </TouchableOpacity>
         <View>
