@@ -6,12 +6,30 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   TouchableOpacity,
-  Button
+  Button,
+  Alert
 } from "react-native";
 import RecyclerRemoval from "./Recyclerremoval";
 import Dialog from "react-native-dialog";
+import axios from "axios";
 
 class AirbagCollection extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalVisible: false,
+      collection: false,
+      userid: props.navigation.state.params.userid,
+      businessID: props.navigation.state.params.busiID,
+      message: "",
+      courier: false,
+      business: "",
+      trading: "",
+      phone: "",
+      address: "",
+    };
+   
+  }
   static navigationOptions = {
     //To set the header image and title for the current Screen
     title: "Airbag Collection Process",
@@ -27,10 +45,7 @@ class AirbagCollection extends Component {
     headerTintColor: "#606070"
     //Text Color of Navigation Bar
   };
-  state = {
-    modalVisible: false,
-    collection: false
-  };
+  
   handleCancel = () => {
     this.setState({ modalVisible: false });
   };
@@ -39,12 +54,50 @@ class AirbagCollection extends Component {
     // The user has pressed the "Delete" button, so here you can do your own logic.
     // ...Your logic
     this.setState({ modalVisible: false });
-    if (this.state.collection) {
-      this.props.navigation.navigate("vin");
-    } else {
-      this.props.navigation.navigate("removal");
-    }
+    
+      let senddata ={
+        userid: this.state.userid,
+        businessID: this.state.businessID
+      }
+      this.props.navigation.navigate("vin",{senddata});
+    
   };
+  componentDidMount() {
+    console.log('Business ID %s', this.state.businessID)
+    axios
+      .get("https://www.takatavinview.com/business/getdetailed/")
+      .then(response => {
+        var dataset = response.data;
+        console.log("Data Source", this.state.businessID);
+
+        this.setState(
+          {
+            dataSource: dataset
+          },
+          function() {
+            this.arrayholder = dataset;
+          }
+        );
+        for (var i in dataset) {
+          if (dataset[i].id == this.state.businessID) {
+            this.setState({
+              business: dataset[i].business_name,
+              trading: dataset[i].Trading_name,
+              phone: dataset[i].business_phone,
+              address:
+                dataset[i].street +
+                "," +
+                dataset[i].state +
+                "," +
+                dataset[i].postcode
+            });
+          }
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
 
   render() {
     const username = this.props.navigation.state.params.username;
@@ -53,12 +106,18 @@ class AirbagCollection extends Component {
         <TouchableOpacity
           style={styles.buttonstyle}
           onPress={() => {
-            this.setState({
-              modalVisible: !this.state.modalVisible,
-              collection: !this.state.collection
-            });
-
-            //console.log("Response is ", response);
+            if (this.state.businessID === 415) {
+              Alert.alert("No Access", "You dont have access to this section. Please select from the other two option",[{text: 'OK', style: 'cancel'}])
+              this.setState({
+                courier: !this.state.courier
+              });
+            }
+            if (this.state.businessID != "415") {
+              this.setState({
+                modalVisible: !this.state.modalVisible,
+                collection: !this.state.collection
+              });
+            }
           }}
         >
           <Text style={{ textAlign: "center" }}>Recycler Collection</Text>
@@ -66,14 +125,19 @@ class AirbagCollection extends Component {
         <TouchableOpacity style={styles.buttonstyle}>
           <Text
             style={{ textAlign: "center" }}
-            onPress={() => this.props.navigation.navigate("removal")}
+            onPress={() => {
+              console.log(this.state.userid)
+              let senddata={
+                userid: this.state.userid,
+              }
+              this.props.navigation.navigate("removal",{senddata})}}
           >
             Recycler Removal
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.buttonstyle}
-          onPress={() => this.props.navigation.navigate("pickle")}
+          onPress={() => this.props.navigation.navigate("pickle",{userid: this.state.userid})}
         >
           <Text style={{ textAlign: "center" }}>Pickles Yard Collection</Text>
         </TouchableOpacity>
@@ -81,18 +145,19 @@ class AirbagCollection extends Component {
           <Dialog.Container visible={this.state.modalVisible}>
             <Dialog.Title>Confirm Business Detail</Dialog.Title>
             <Dialog.Description>
-              Business Name:{this.state.business} {"\n"}
-              Trading Name:{this.state.trading}
+              Business Name: {this.state.business} {"\n"}
+              Trading Name: {this.state.trading}
               {"\n"}
-              Contact Number:{this.state.Phone}
+              Contact Number: {this.state.Phone}
               {"\n"}
-              Address: {this.state.Address}
+              Address: {this.state.address}
               {"\n"}
             </Dialog.Description>
             <Dialog.Button label="Cancel" onPress={this.handleCancel} />
             <Dialog.Button label="Confirm" onPress={this.handleDelete} />
           </Dialog.Container>
         </View>
+       
       </View>
     );
   }

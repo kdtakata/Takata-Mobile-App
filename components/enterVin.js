@@ -11,28 +11,55 @@ import {
 const width = Dimensions.get("window").width;
 
 class VinEnter extends React.Component {
-  render(){
-      return (
-    <View style={styles.container}>
-      <Text
-        style={{
-          fontSize: width * 0.05,
-          marginTop: 20,
-          alignContent: "space-around"
-        }}
-      >
-        Enter the VIN
-      </Text>
-      <TextInput
-        autoCapitalize="characters"
-        maxLength={17}
-        style={styles.textinput}
-      ></TextInput>
-      <TouchableOpacity style={styles.buttonstyle} onPress={()=> this.props.navigation.navigate("detail")}>
-        <Text style={{ textAlign: "center" }}>Submit</Text>
-      </TouchableOpacity>
-    </View>
-  );}
+  constructor(props) {
+    super(props);
+    console.log("inside VIN Enter",props.navigation.state)
+    this.state = { vin: " ", userid: props.navigation.state.params.senddata.userid , busiID: props.navigation.state.params.senddata.businessID };
+  }
+  vinchange = event => {
+    let processData = event.nativeEvent.text;
+    this.setState({ vin: processData });
+  };
+  vincheck = () => {
+    fetch("https://takatalive.com/api/takata/"+this.state.vin)
+      .then(response => response.json())
+      .then(responseJson => {
+        var obj = JSON.parse(responseJson);
+        console.log(obj.HasMatch);
+        if (obj.HasMatch) {
+          let datasend = {
+            data: obj.Result,
+            username: this.state.userid,
+            bussID: this.state.busiID,
+          };
+          this.props.navigation.navigate("detail", { send: datasend });
+        }
+      });
+  };
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text
+          style={{
+            fontSize: width * 0.05,
+            marginTop: 20,
+            alignContent: "space-around"
+          }}
+        >
+          Enter the VIN
+        </Text>
+        <TextInput
+          autoCapitalize="characters"
+          maxLength={17}
+          style={styles.textinput}
+          onChange={this.vinchange}
+        ></TextInput>
+        <TouchableOpacity style={styles.buttonstyle} onPress={this.vincheck}>
+          <Text style={{ textAlign: "center" }}>Submit</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 }
 const styles = StyleSheet.create({
   container: {

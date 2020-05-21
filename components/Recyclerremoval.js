@@ -10,7 +10,9 @@ import {
   Dimensions,
   TouchableHighlight,
   TouchableOpacity,
-  Picker
+  Picker,
+  RefreshControl,
+  ScrollView
 } from "react-native";
 import Dialog from "react-native-dialog";
 import { SearchBar, Card } from "react-native-elements";
@@ -31,8 +33,11 @@ class RecyclerRemoval extends React.Component {
   };
   constructor(props) {
     super(props);
+    //
+    console.log();
     //setting default state
     this.state = {
+      userid: props.navigation.state.params.senddata.userid,
       isLoading: true,
       search: "",
       modalVisible: false,
@@ -40,11 +45,15 @@ class RecyclerRemoval extends React.Component {
       trading: "",
       Phone: "",
       Address: "",
-      selectedValue: ""
+      selectedValue: "",
+      businesskey: "",
+      refreshing: false
     };
+    console.log("Removal List");
+
     this.arrayholder = [];
   }
-  componentDidMount() {
+  componentWillMount() {
     axios
       .get("https://www.takatavinview.com/business/getdetailed/")
       .then(response => {
@@ -70,6 +79,29 @@ class RecyclerRemoval extends React.Component {
   };
   clear = () => {
     this.search.clear();
+  };
+  _onRefresh = () => {
+    this.setState({ refreshing: true }); axios
+    .get("https://www.takatavinview.com/business/getdetailed/")
+    .then(response => {
+      var dataset = response.data;
+      console.log("Data Source", dataset[1]);
+      this.setState(
+        {
+          isLoading: false,
+          dataSource: dataset
+        },
+        function() {
+          this.arrayholder = dataset;
+        }
+      );
+    })
+    .catch(error => {
+      console.error(error);
+    }).then(() => {
+      this.setState({ refreshing: false });
+    });
+   
   };
 
   SearchFilterFunction(text) {
@@ -98,7 +130,11 @@ class RecyclerRemoval extends React.Component {
     // The user has pressed the "Delete" button, so here you can do your own logic.
     // ...Your logic
     this.setState({ modalVisible: false });
-    this.props.navigation.navigate("vin");
+    let senddata = {
+      userid: this.state.userid,
+      businessID: this.state.businesskey
+    };
+    this.props.navigation.navigate("vin", { senddata });
   };
 
   ListViewItemSeparator = () => {
@@ -140,6 +176,21 @@ class RecyclerRemoval extends React.Component {
     return (
       //ListView to show with textinput used as search bar
       <View style={styles.viewStyle}>
+        <TouchableOpacity style={styles.buttonstyle}>
+          <Text
+            style={{ textAlign: "center" }}
+            onPress={() => {
+              console.log(this.state.userid);
+              let senddata = {
+                userid: this.state.userid
+              };
+              this.props.navigation.navigate("newBusi", { senddata });
+            }}
+          >
+            Create a new Bussiness
+          </Text>
+        </TouchableOpacity>
+
         {/* <Picker
           style={{ width: width }}
           selectedValue={this.state.selectedValue}
@@ -150,42 +201,52 @@ class RecyclerRemoval extends React.Component {
           <Picker.Item label="Business Name" value="java" />
           <Picker.Item label="Trading Name" value="js" />
         </Picker> */}
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }
+        >
+          <SearchBar
+            round
+            searchIcon={{ size: 24 }}
+            onChangeText={text => this.SearchFilterFunction(text)}
+            onClear={text => this.SearchFilterFunction("")}
+            placeholder="Type Here..."
+            value={this.state.search}
+          />
 
-        <SearchBar
-          round
-          searchIcon={{ size: 24 }}
-          onChangeText={text => this.SearchFilterFunction(text)}
-          onClear={text => this.SearchFilterFunction("")}
-          placeholder="Type Here..."
-          value={this.state.search}
-        />
-        <FlatList
-          data={this.state.dataSource}
-          ItemSeparatorComponent={this.ListViewItemSeparator}
-          ListFooterComponent={this.footer}
-          //Item Separator View
-          renderItem={({ item }) => (
-            // Single Comes here which will be repeatative for the FlatListItems
-            <Text
-              style={styles.textStyle}
-              onPress={() =>
-                this.setState({
-                  modalVisible: true,
-                  business: item.business_name,
-                  trading: item.Trading_name,
-                  Phone: item.business_phone,
-                  Address: item.street + "," + item.state + "," + item.postcode
-                })
-              }
-            >
-              {item.business_name}
-            </Text>
-          )}
-          enableEmptySections={true}
-          style={{ marginTop: 10 }}
-          keyExtractor={(item, index) => index.toString()}
-        />
-
+          <FlatList
+            data={this.state.dataSource}
+            ItemSeparatorComponent={this.ListViewItemSeparator}
+            
+            //Item Separator View
+            renderItem={({ item }) => (
+              // Single Comes here which will be repeatative for the FlatListItems
+              <Text
+                style={styles.textStyle}
+                onPress={() =>
+                  this.setState({
+                    modalVisible: true,
+                    business: item.business_name,
+                    trading: item.Trading_name,
+                    Phone: item.business_phone,
+                    Address:
+                      item.street + "," + item.state + "," + item.postcode,
+                    businesskey: item.id
+                  })
+                }
+              >
+                {item.business_name}
+              </Text>
+            )}
+            enableEmptySections={true}
+            style={{ marginTop: 10 }}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </ScrollView>
         <View>
           <Dialog.Container visible={this.state.modalVisible}>
             <Dialog.Title>Confirm Business Detail</Dialog.Title>
@@ -212,7 +273,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flex: 1,
     backgroundColor: "white",
-    marginTop: Platform.OS == "ios" ? 30 : 0
+    marginTop: Platform.OS == "ios" ? 0 : 0
   },
   textStyle: {
     padding: 10
@@ -229,7 +290,7 @@ const styles = StyleSheet.create({
     padding: 10,
     alignSelf: "center",
     borderRadius: 10,
-    width: 250
+    width: width
   },
   pickerBoxContainer: {
     flexDirection: "row",

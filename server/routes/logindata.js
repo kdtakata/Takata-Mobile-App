@@ -1,7 +1,7 @@
 const { Connection, Request } = require("tedious");
 
 module.exports = (req,res) => {
-    console.log(req)
+   
 // Create connection to database
 const config = {
   authentication: {
@@ -25,7 +25,7 @@ connection.on("connect", err => {
   if (err) {
     console.error(err.message);
   } else {
-    //queryDatabase();
+    queryDatabase();
   }
 });
 
@@ -37,22 +37,36 @@ async function queryDatabase() {
   // Read all rows from table
   const request =await new Request(
     `SELECT *
-     FROM [dbo].[nadi_nadiregistration] where password = '` + req.body.password + `' and username ='` + req.body.username `'` ,
+     FROM [dbo].[takata_user_registration] where password = '` + req.body.password + `' and username ='` + req.body.username +`'` ,
     (err, rowCount) => {
       if (err) {
         console.error(err.message);
       } else {
           if(rowCount == 1){
-            res.status(200).send("Authorized");
+            
           }else{
-              res.status(404);
+              res.status(200).send("NotAuthorized");
           }
           
       }
     }
   );
- 
-  
+  let data={
+    id: '',
+    bid: '',
+  }
+  request.on("row", columns => {
+    columns.forEach(column =>{
+      console.log("%s\t%s", column.metadata.colName, column.value)
+      if(column.metadata.colName === "id"){
+        data.id = column.value
+      }
+      if(column.metadata.colName === "bid"){
+        data.bid = column.value
+        res.status(200).send(data);
+      }
+    })
+  })
   connection.execSql(request);
 }
 

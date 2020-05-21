@@ -1,28 +1,34 @@
 import React from 'react';
-import {StyleSheet, Text, View, TextInput, Dimensions, ScrollView, TouchableOpacity} from 'react-native'
+import {StyleSheet, Text, View, TextInput, Dimensions, ScrollView,Alert, TouchableOpacity} from 'react-native'
 import {Card, CheckBox, Image} from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import Spinner from "react-native-loading-spinner-overlay";
+import axios from 'axios'
 
 const width = Dimensions.get("window").width;
 class Details extends React.Component {
     constructor(props, {}) {
       super(props);
-      console.log(
-        "Detail",
-        
-      );
+      
+      console.log(props.navigation.state.params.send.data[1]);
+      var vininfo = props.navigation.state.params.send.data;
+      var location;
+      if(vininfo[1]){
+        location = 'Driver  Passenger'
+      }else{
+        location = vininfo[0].AirbagLocation
+      }
       this.state = {
-        username: '',
-        sitelocation: '',
-        vin: '',
-        Airbaglocation: '',
-        Make: '',
-        Model: '',
-        PRAnum: '',
-        Series: '',
-        Year: '',
+        username:props.navigation.state.params.send.username ,
+        sitelocation: props.navigation.state.params.send.bussID,
+        vin: vininfo[0].VIN,
+        Airbaglocation: location,
+        Make: vininfo[0].Make,
+        Model: vininfo[0].Model,
+        PRAnum: vininfo[0].PRANum,
+        Series: vininfo[0].Series,
+        Year: vininfo[0].Year,
         image: null,
         image2: null,
         base641: null,
@@ -30,7 +36,7 @@ class Details extends React.Component {
         check1: false,
         spinner: false,
       };
-      
+
     }
     static navigationOptions = {
       headerTitleStyle: {
@@ -46,7 +52,7 @@ class Details extends React.Component {
           spinner: true,
         });
         axios
-          .post("/vincheck", {
+          .post("http://192.168.0.20:5000/update", {
             image1: this.state.base641,
             image2: this.state.base642,
             site: this.state.sitelocation,
@@ -67,12 +73,17 @@ class Details extends React.Component {
               [
                 {
                   text: "Yes",
-                //   onPress: () =>
-                //     this.props.navigation.navigate("Vin", { sitelocation: site }),
+                   onPress: () =>{ let senddata ={
+                    userid: this.state.username,
+                    businessID: this.state.sitelocation
+                  }
+                  this.props.navigation.navigate("vin",{senddata});
+                     }
+                     ,
                 },
                 {
                   text: "No",
-                //   onPress: () => this.props.navigation.navigate("home"),
+                   onPress: () => this.props.navigation.navigate("home"),
                 },
               ],
               { cancelable: false }

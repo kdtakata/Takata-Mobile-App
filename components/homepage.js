@@ -7,11 +7,13 @@ import {
   Dimensions,
   TouchableOpacity,
   Button,
+  Platform,
 } from "react-native";
 import { Image } from "react-native-elements";
 import { TextInput } from "react-native-gesture-handler";
 import data from "../api/configure";
 import axios from "axios";
+import {username, businessID} from './userbusiness';
 
 const width = Dimensions.get("window").width;
 
@@ -27,24 +29,41 @@ class HomePage extends React.Component {
       password: this.state.password
     }
     
-    //console.log("Response is ", response);
+    axios.post("http://192.168.0.20:5000/userLogin",datasend).then((response) => {
+      if(response.data != "NotAuthorized"){
 
-    this.props.navigation.navigate("airbag", { username: this.state.username });
+        console.log(response.data.id);
+        this.setState({error: null,message: null,userid: response.data.id, businessID: response.data.bid})
+        this.props.navigation.navigate("airbag", { userid: this.state.userid, busiID: this.state.businessID });
+      }else{
+this.setState({error: 'nice'});
+      }
+    }).catch((error) =>{
+      console.log(error.message);
+      this.setState({message: error.message + ' Please try again after some time'});
+    });
+
+   // 
   };
   state = {
     username: " ",
     password: " ",
     spinner: false,
+    error: null,
+    message: null,
+    userid: '',
+    businessID: '',
   };
   usernamechange = (event) => {
     let processData = event.nativeEvent.text;
+  
     this.setState({ username: processData });
   };
   passwordupdate = (event) => {
     let processData = event.nativeEvent.text;
     this.setState({ password: processData });
   };
-  render() {
+  render() { let{error, message} = this.state;
     return (
       <View
         style={{
@@ -54,7 +73,7 @@ class HomePage extends React.Component {
           justifyContent: "center",
         }}
       >
-        <KeyboardAvoidingView>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : null} >
           <View style={{ alignItems: "center" }}>
             <Image
               style={{ width: 150, height: 150 }}
@@ -72,7 +91,14 @@ class HomePage extends React.Component {
             >
               TAKATA PICKLES
             </Text>
+
           </View>
+          {error && (<View>
+            <Text style={{textShadowColor:'#FF0000', color:'#FF0000'}}>Please enter the correct username or password</Text>
+        </View>)}
+        {message && (<View>
+            <Text style={{textShadowColor:'#FF0000', color:'#FF0000'}}>{message}</Text>
+        </View>)}
           <Text
             style={{
               fontSize: width * 0.05,

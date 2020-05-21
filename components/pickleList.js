@@ -16,7 +16,9 @@ const width = Dimensions.get("window").width;
 class PickleArea extends React.Component {
   constructor(props) {
     super(props);
+    console.log('Pickle List', props.navigation.state)
     this.state = {
+      userid: props.navigation.state.params.userid,
       isLoading: true,
       VIC: [],
       NSW: [],
@@ -31,7 +33,7 @@ class PickleArea extends React.Component {
 
   componentDidMount() {
     axios
-      .post("http://192.168.0.20:5000/pickle",{chutiya: 'Hello'})
+      .post("http://192.168.0.20:5000/pickle", { chutiya: "Hello" })
       .then(response => {
         this.setState({
           VIC: response.data.VIClist,
@@ -60,183 +62,231 @@ class PickleArea extends React.Component {
     }
     return (
       <View style={styles.container}>
-          <ScrollView>
-           <Text
-          style={{ fontWeight: "bold", textAlign: "center", marginTop: 20 }}
-        >
-          {" "}
-          Victoria
-        </Text>
-        <FlatList
-          style={{ marginTop: 10 }}
-          data={this.state.VIC}
-          renderItem={({ item }) => (
-            <View style={{ justifyContent: "center", marginBottom: 10 }}>
-              <Text
-                style={{
-                  backgroundColor: "blue",
-                  color: "white",
-                  textAlign:'center',
-                  padding: 10,
-                  width: Dimensions.get("window").width
-                }}
-              >
-                {item.name}
-              </Text>
-            </View>
-          )}
-        />
-        <Text
-          style={{ fontWeight: "bold", textAlign: "center", marginTop: 10 }}
-        >
-          {" "}
-          NSW
-        </Text>
-        <FlatList
-          style={{ marginTop: 10 }}
-          data={this.state.NSW}
-          renderItem={({ item }) => (
-            <View style={{ justifyContent: "center", marginBottom: 10 }}>
-              <Text
-                style={{
-                  backgroundColor: "blue",
-                  color: "white",
-                  textAlign:'center',
-                  padding: 10,
-                  width: Dimensions.get("window").width
-                }}
-              >
-                {item.name}
-              </Text>
-            </View>
-          )}
-        />
-        <Text
-          style={{ fontWeight: "bold", textAlign: "center", marginTop: 20 }}
-        >
-          {" "}
-          South Australia
-        </Text>
-        <FlatList
-          style={{ marginTop: 10 }}
-          data={this.state.SA}
-          renderItem={({ item }) => (
-            <View style={{ justifyContent: "center", marginBottom: 10 }}>
-              <Text
-                style={{
-                  backgroundColor: "blue",
-                  color: "white",
-                  textAlign:'center',
-                  padding: 10,
-                  width: Dimensions.get("window").width
-                }}
-              >
-                {item.name}
-              </Text>
-            </View>
-          )}
-        />
-        <Text
-          style={{ fontWeight: "bold", textAlign: "center", marginTop: 20 }}
-        >
-          {" "}
-          Queensland
-        </Text>
-        <FlatList
-          style={{ marginTop: 10 }}
-          data={this.state.QLD}
-          renderItem={({ item }) => (
-            <View style={{ justifyContent: "center", marginBottom: 10 }}>
-              <Text
-                style={{
-                  backgroundColor: "blue",
-                  color: "white",
-                  textAlign:'center',
-                  padding: 10,
-                  width: Dimensions.get("window").width
-                }}
-              >
-                {item.name}
-              </Text>
-            </View>
-          )}
-        />
-        <Text
-          style={{ fontWeight: "bold", textAlign: "center", marginTop: 20 }}
-        >
-          {" "}
-          Northern Territory 
-        </Text>
-        <FlatList
-          style={{ marginTop: 10 }}
-          data={this.state.NT}
-          renderItem={({ item }) => (
-            <View style={{ justifyContent: "center", marginBottom: 10 }}>
-              <Text
-                style={{
-                  backgroundColor: "blue",
-                  color: "white",
-                  textAlign:'center',
-                  padding: 10,
-                  width: Dimensions.get("window").width
-                }}
-              >
-                {item.name}
-              </Text>
-            </View>
-          )}
-        />
-        <Text
-          style={{ fontWeight: "bold", textAlign: "center", marginTop: 20 }}
-        >
-          {" "}
-          Western Australia
-        </Text>
-        <FlatList
-          style={{ marginTop: 10 }}
-          data={this.state.WA}
-          renderItem={({ item }) => (
-            <View style={{ justifyContent: "center", marginBottom: 10 }}>
-              <Text
-                style={{
-                  backgroundColor: "blue",
-                  color: "white",
-                  textAlign:'center',
-                  padding: 10,
-                  width: Dimensions.get("window").width
-                }}
-              >
-                {item.name}
-              </Text>
-            </View>
-          )}
-        />
-        <Text
-          style={{ fontWeight: "bold", textAlign: "center", marginTop: 20 }}
-        >
-          {" "}
-          ACT
-        </Text>
-        <FlatList
-          style={{ marginTop: 10 }}
-          data={this.state.ACT}
-          renderItem={({ item }) => (
-            <View style={{ justifyContent: "center", marginBottom: 10 }}>
-              <Text
-                style={{
-                  backgroundColor: "blue",
-                  color: "white",
-                  textAlign:'center',
-                  padding: 10,
-                  width: Dimensions.get("window").width
-                }}
-              >
-                {item.name}
-              </Text>
-            </View>
-          )}
-        />
-
+        <ScrollView>
+          <Text
+            style={{ fontWeight: "bold", textAlign: "center", marginTop: 20 }}
+          >
+            {" "}
+            Victoria
+          </Text>
+          <FlatList
+            style={{ marginTop: 10 }}
+            data={this.state.VIC}
+            renderItem={({ item }) => (
+              <View style={{ justifyContent: "center", marginBottom: 10 }}>
+                <Text
+                  style={{
+                    backgroundColor: "blue",
+                    color: "white",
+                    textAlign: "center",
+                    padding: 10,
+                    width: Dimensions.get("window").width
+                  }}
+                  onPress={()=> {
+                    let senddata ={
+                      userid: this.state.userid,
+                      businessID: item.key
+                    }
+                    this.props.navigation.navigate("vin",{senddata});
+                    }}
+                >
+                  {item.name}
+                </Text>
+              </View>
+            )}
+          />
+          <Text
+            style={{ fontWeight: "bold", textAlign: "center", marginTop: 10 }}
+          >
+            {" "}
+            NSW
+          </Text>
+          <FlatList
+            style={{ marginTop: 10 }}
+            data={this.state.NSW}
+            renderItem={({ item }) => (
+              <View style={{ justifyContent: "center", marginBottom: 10 }}>
+                <Text
+                  style={{
+                    backgroundColor: "blue",
+                    color: "white",
+                    textAlign: "center",
+                    padding: 10,
+                    width: Dimensions.get("window").width
+                  }}
+                  onPress={()=> {
+                    let senddata ={
+                      userid: this.state.userid,
+                      businessID: item.key
+                    }
+                    this.props.navigation.navigate("vin",{senddata});
+                    }}
+                >
+                  {item.name}
+                </Text>
+              </View>
+            )}
+          />
+          <Text
+            style={{ fontWeight: "bold", textAlign: "center", marginTop: 20 }}
+          >
+            {" "}
+            South Australia
+          </Text>
+          <FlatList
+            style={{ marginTop: 10 }}
+            data={this.state.SA}
+            renderItem={({ item }) => (
+              <View style={{ justifyContent: "center", marginBottom: 10 }}>
+                <Text
+                  style={{
+                    backgroundColor: "blue",
+                    color: "white",
+                    textAlign: "center",
+                    padding: 10,
+                    width: Dimensions.get("window").width
+                  }}
+                  onPress={()=> {
+                    let senddata ={
+                      userid: this.state.userid,
+                      businessID: item.key
+                    }
+                    this.props.navigation.navigate("vin",{senddata});
+                    }}
+                >
+                  {item.name}
+                </Text>
+              </View>
+            )}
+          />
+          <Text
+            style={{ fontWeight: "bold", textAlign: "center", marginTop: 20 }}
+          >
+            {" "}
+            Queensland
+          </Text>
+          <FlatList
+            style={{ marginTop: 10 }}
+            data={this.state.QLD}
+            renderItem={({ item }) => (
+              <View style={{ justifyContent: "center", marginBottom: 10 }}>
+                <Text
+                  style={{
+                    backgroundColor: "blue",
+                    color: "white",
+                    textAlign: "center",
+                    padding: 10,
+                    width: Dimensions.get("window").width
+                  }}
+                  onPress={()=> {
+                    let senddata ={
+                      userid: this.state.userid,
+                      businessID: item.key
+                    }
+                    this.props.navigation.navigate("vin",{senddata});
+                    }}
+                >
+                  {item.name}
+                </Text>
+              </View>
+            )}
+          />
+          <Text
+            style={{ fontWeight: "bold", textAlign: "center", marginTop: 20 }}
+          >
+            {" "}
+            Northern Territory
+          </Text>
+          <FlatList
+            style={{ marginTop: 10 }}
+            data={this.state.NT}
+            renderItem={({ item }) => (
+              <View style={{ justifyContent: "center", marginBottom: 10 }}>
+                <Text
+                  style={{
+                    backgroundColor: "blue",
+                    color: "white",
+                    textAlign: "center",
+                    padding: 10,
+                    width: Dimensions.get("window").width
+                  }}
+                  onPress={()=> {
+                    let senddata ={
+                      userid: this.state.userid,
+                      businessID: item.key
+                    }
+                    this.props.navigation.navigate("vin",{senddata});
+                    }}
+                >
+                  {item.name}
+                </Text>
+              </View>
+            )}
+          />
+          <Text
+            style={{ fontWeight: "bold", textAlign: "center", marginTop: 20 }}
+          >
+            {" "}
+            Western Australia
+          </Text>
+          <FlatList
+            style={{ marginTop: 10 }}
+            data={this.state.WA}
+            renderItem={({ item }) => (
+              <View style={{ justifyContent: "center", marginBottom: 10 }}>
+                <Text
+                  style={{
+                    backgroundColor: "blue",
+                    color: "white",
+                    textAlign: "center",
+                    padding: 10,
+                    width: Dimensions.get("window").width
+                  }}
+                  onPress={()=> {
+                    let senddata ={
+                      userid: this.state.userid,
+                      businessID: item.key
+                    }
+                    this.props.navigation.navigate("vin",{senddata});
+                    }}
+                >
+                  {item.name}
+                </Text>
+              </View>
+            )}
+          />
+          <Text
+            style={{ fontWeight: "bold", textAlign: "center", marginTop: 20 }}
+          >
+            {" "}
+            ACT
+          </Text>
+          <FlatList
+            style={{ marginTop: 10 }}
+            data={this.state.ACT}
+            renderItem={({ item }) => (
+              <View style={{ justifyContent: "center", marginBottom: 10 }}>
+                <Text
+                  style={{
+                    backgroundColor: "blue",
+                    color: "white",
+                    textAlign: "center",
+                    padding: 10,
+                    width: Dimensions.get("window").width
+                  }}
+                  onPress={()=> {
+                    let senddata ={
+                      userid: this.state.userid,
+                      businessID: item.key
+                    }
+                    this.props.navigation.navigate("vin",{senddata});
+                    }}
+                >
+                  {item.name}
+                </Text>
+              </View>
+            )}
+          />
         </ScrollView>
       </View>
     );
