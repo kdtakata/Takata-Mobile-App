@@ -33,7 +33,7 @@ class PickleArea extends React.Component {
 
   componentDidMount() {
     axios
-      .post("http://192.168.0.20:5000/pickle", { chutiya: "Hello" })
+      .post("http://192.168.0.20:5000/pickle")
       .then(response => {
         this.setState({
           VIC: response.data.VIClist,
@@ -85,7 +85,8 @@ class PickleArea extends React.Component {
                   onPress={()=> {
                     let senddata ={
                       userid: this.state.userid,
-                      businessID: item.key
+                      businessID: item.key,
+                      type: 'pickle'
                     }
                     this.props.navigation.navigate("vin",{senddata});
                     }}
@@ -117,7 +118,8 @@ class PickleArea extends React.Component {
                   onPress={()=> {
                     let senddata ={
                       userid: this.state.userid,
-                      businessID: item.key
+                      businessID: item.key,
+                      type: 'pickle'
                     }
                     this.props.navigation.navigate("vin",{senddata});
                     }}
@@ -149,7 +151,8 @@ class PickleArea extends React.Component {
                   onPress={()=> {
                     let senddata ={
                       userid: this.state.userid,
-                      businessID: item.key
+                      businessID: item.key,
+                      type: 'pickle'
                     }
                     this.props.navigation.navigate("vin",{senddata});
                     }}
@@ -181,7 +184,8 @@ class PickleArea extends React.Component {
                   onPress={()=> {
                     let senddata ={
                       userid: this.state.userid,
-                      businessID: item.key
+                      businessID: item.key,
+                      type: 'pickle'
                     }
                     this.props.navigation.navigate("vin",{senddata});
                     }}
@@ -213,7 +217,8 @@ class PickleArea extends React.Component {
                   onPress={()=> {
                     let senddata ={
                       userid: this.state.userid,
-                      businessID: item.key
+                      businessID: item.key,
+                      type: 'pickle'
                     }
                     this.props.navigation.navigate("vin",{senddata});
                     }}
@@ -245,7 +250,8 @@ class PickleArea extends React.Component {
                   onPress={()=> {
                     let senddata ={
                       userid: this.state.userid,
-                      businessID: item.key
+                      businessID: item.key,
+                      type: 'pickle'
                     }
                     this.props.navigation.navigate("vin",{senddata});
                     }}
@@ -277,7 +283,8 @@ class PickleArea extends React.Component {
                   onPress={()=> {
                     let senddata ={
                       userid: this.state.userid,
-                      businessID: item.key
+                      businessID: item.key,
+                      type: 'pickle'
                     }
                     this.props.navigation.navigate("vin",{senddata});
                     }}

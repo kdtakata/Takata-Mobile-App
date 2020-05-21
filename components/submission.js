@@ -11,7 +11,7 @@ class Details extends React.Component {
     constructor(props, {}) {
       super(props);
       
-      console.log(props.navigation.state.params.send.data[1]);
+      console.log(props.navigation.state.params.send);
       var vininfo = props.navigation.state.params.send.data;
       var location;
       if(vininfo[1]){
@@ -29,6 +29,7 @@ class Details extends React.Component {
         PRAnum: vininfo[0].PRANum,
         Series: vininfo[0].Series,
         Year: vininfo[0].Year,
+        type:props.navigation.state.params.send.type,
         image: null,
         image2: null,
         base641: null,
@@ -51,6 +52,7 @@ class Details extends React.Component {
         this.setState({
           spinner: true,
         });
+        console.log('TYPE IS',this.state.type)
         axios
           .post("http://192.168.0.20:5000/update", {
             image1: this.state.base641,
@@ -58,6 +60,7 @@ class Details extends React.Component {
             site: this.state.sitelocation,
             vin: this.state.vin,
             user: this.state.username,
+            type: this.state.type
           })
           .then((response) => {
             console.log("Going Next");
@@ -75,7 +78,8 @@ class Details extends React.Component {
                   text: "Yes",
                    onPress: () =>{ let senddata ={
                     userid: this.state.username,
-                    businessID: this.state.sitelocation
+                    businessID: this.state.sitelocation,
+                    type: this.state.type,
                   }
                   this.props.navigation.navigate("vin",{senddata});
                      }

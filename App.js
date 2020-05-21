@@ -18,7 +18,6 @@ export default class App extends Component {
   componentDidMount() {
     console.disableYellowBox = true;
   }
-
   render() {
     return <AppContainer />;
   }
@@ -31,7 +30,7 @@ const RootStack = createStackNavigator(
     removal: {
       screen: RecyclerRemoval,
       navigationOptions: {
-        title: "Recycler Removal",
+        title: "Business List",
         headerStyle: {
           backgroundColor: "#e3e3e3"
         },

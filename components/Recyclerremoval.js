@@ -39,6 +39,7 @@ class RecyclerRemoval extends React.Component {
     this.state = {
       userid: props.navigation.state.params.senddata.userid,
       isLoading: true,
+      type:props.navigation.state.params.senddata.type,
       search: "",
       modalVisible: false,
       business: "",
@@ -132,7 +133,8 @@ class RecyclerRemoval extends React.Component {
     this.setState({ modalVisible: false });
     let senddata = {
       userid: this.state.userid,
-      businessID: this.state.businesskey
+      businessID: this.state.businesskey,
+      type:this.state.type
     };
     this.props.navigation.navigate("vin", { senddata });
   };

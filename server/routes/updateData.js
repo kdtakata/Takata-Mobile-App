@@ -10,6 +10,7 @@ module.exports = (req, res) => {
 console.log('Site is',req.body.site);
 console.log('VIN is',req.body.vin);
 console.log('user is',req.body.user);
+console.log('user is',req.body.type);
     //console.log('Image',req.body.image1);
     var rawimage2 = req.body.image2;
     const config = {
@@ -50,7 +51,7 @@ console.log('VIN is',req.body.vin);
 console.log('user is',req.body.user);
 
     const request = new Request(
-      `INSERT INTO dbo.takata_Images (vin,img1,img2,tmst,status,bid,userid) Values ('`+req.body.vin+`','`+image1name+`','`+image2name+`','`+today+`','Inflator Removed','`+req.body.site +`','`+req.body.user+`')`,
+      `INSERT INTO dbo.takata_Images (vin,img1,img2,tmst,status,bid,userid,removal_type) Values ('`+req.body.vin+`','`+image1name+`','`+image2name+`','`+today+`','Inflator Removed','`+req.body.site +`','`+req.body.user+`','`+req.body.type+`')`,
       (err) => {
         if (err) {
           console.error(err.message);

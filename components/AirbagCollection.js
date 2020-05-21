@@ -1,15 +1,6 @@
 import React, { Component, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Text,
-  KeyboardAvoidingView,
-  Dimensions,
-  TouchableOpacity,
-  Button,
-  Alert
-} from "react-native";
-import RecyclerRemoval from "./Recyclerremoval";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+
 import Dialog from "react-native-dialog";
 import axios from "axios";
 
@@ -26,9 +17,8 @@ class AirbagCollection extends Component {
       business: "",
       trading: "",
       phone: "",
-      address: "",
+      address: ""
     };
-   
   }
   static navigationOptions = {
     //To set the header image and title for the current Screen
@@ -45,25 +35,8 @@ class AirbagCollection extends Component {
     headerTintColor: "#606070"
     //Text Color of Navigation Bar
   };
-  
-  handleCancel = () => {
-    this.setState({ modalVisible: false });
-  };
-
-  handleDelete = () => {
-    // The user has pressed the "Delete" button, so here you can do your own logic.
-    // ...Your logic
-    this.setState({ modalVisible: false });
-    
-      let senddata ={
-        userid: this.state.userid,
-        businessID: this.state.businessID
-      }
-      this.props.navigation.navigate("vin",{senddata});
-    
-  };
   componentDidMount() {
-    console.log('Business ID %s', this.state.businessID)
+    console.log("Business ID %s", this.state.businessID);
     axios
       .get("https://www.takatavinview.com/business/getdetailed/")
       .then(response => {
@@ -106,18 +79,12 @@ class AirbagCollection extends Component {
         <TouchableOpacity
           style={styles.buttonstyle}
           onPress={() => {
-            if (this.state.businessID === 415) {
-              Alert.alert("No Access", "You dont have access to this section. Please select from the other two option",[{text: 'OK', style: 'cancel'}])
-              this.setState({
-                courier: !this.state.courier
-              });
-            }
-            if (this.state.businessID != "415") {
-              this.setState({
-                modalVisible: !this.state.modalVisible,
-                collection: !this.state.collection
-              });
-            }
+            console.log(this.state.userid);
+            let senddata = {
+              userid: this.state.userid,
+              type: "rc"
+            };
+            this.props.navigation.navigate("removal", { senddata });
           }}
         >
           <Text style={{ textAlign: "center" }}>Recycler Collection</Text>
@@ -126,38 +93,28 @@ class AirbagCollection extends Component {
           <Text
             style={{ textAlign: "center" }}
             onPress={() => {
-              console.log(this.state.userid)
-              let senddata={
+              console.log(this.state.userid);
+              let senddata = {
                 userid: this.state.userid,
-              }
-              this.props.navigation.navigate("removal",{senddata})}}
+                type: "rr"
+              };
+              this.props.navigation.navigate("removal", { senddata });
+            }}
           >
             Recycler Removal
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.buttonstyle}
-          onPress={() => this.props.navigation.navigate("pickle",{userid: this.state.userid})}
+          onPress={() =>
+            this.props.navigation.navigate("pickle", {
+              userid: this.state.userid
+            })
+          }
         >
           <Text style={{ textAlign: "center" }}>Pickles Yard Collection</Text>
         </TouchableOpacity>
-        <View>
-          <Dialog.Container visible={this.state.modalVisible}>
-            <Dialog.Title>Confirm Business Detail</Dialog.Title>
-            <Dialog.Description>
-              Business Name: {this.state.business} {"\n"}
-              Trading Name: {this.state.trading}
-              {"\n"}
-              Contact Number: {this.state.Phone}
-              {"\n"}
-              Address: {this.state.address}
-              {"\n"}
-            </Dialog.Description>
-            <Dialog.Button label="Cancel" onPress={this.handleCancel} />
-            <Dialog.Button label="Confirm" onPress={this.handleDelete} />
-          </Dialog.Container>
-        </View>
-       
+        
       </View>
     );
   }

@@ -14,7 +14,7 @@ class VinEnter extends React.Component {
   constructor(props) {
     super(props);
     console.log("inside VIN Enter",props.navigation.state)
-    this.state = { vin: " ", userid: props.navigation.state.params.senddata.userid , busiID: props.navigation.state.params.senddata.businessID };
+    this.state = { vin: " ", userid: props.navigation.state.params.senddata.userid , busiID: props.navigation.state.params.senddata.businessID, type: props.navigation.state.params.senddata.type};
   }
   vinchange = event => {
     let processData = event.nativeEvent.text;
@@ -31,6 +31,7 @@ class VinEnter extends React.Component {
             data: obj.Result,
             username: this.state.userid,
             bussID: this.state.busiID,
+            type: this.state.type
           };
           this.props.navigation.navigate("detail", { send: datasend });
         }
