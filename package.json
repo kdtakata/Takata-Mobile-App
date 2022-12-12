@@ -15,7 +15,7 @@
     "expo": "~37.0.3",
     "expo-image-picker": "^8.1.0",
     "expo-permissions": "^8.1.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "moment": "^2.25.3",
     "node-fetch": "^2.6.0",
     "react": "~16.9.0",
